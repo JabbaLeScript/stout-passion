@@ -1,17 +1,12 @@
 package com.beerapp.beers.entity;
 
-import org.hibernate.mapping.Set;
-import org.hibernate.procedure.spi.ParameterRegistrationImplementor;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.HashSet;
 
 import javax.persistence.*;
 import java.util.Set;
 
+
 @Entity
-@Table(name = "user")
+@Table(name = "USER")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +20,7 @@ public class User {
     private String passwordConfirm;
 
     @ManyToMany
-    private Set roles;
+    private java.util.Set<Role> roles;
 
     public Long getId() {
         return id;
@@ -66,3 +61,4 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+}
