@@ -3,18 +3,17 @@ package com.beerapp.beers.entity;
 import lombok.Data;
 
 
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
+@Table(name = "BEERS")
 public class Beers {
 
     @Id
     @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column

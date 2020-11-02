@@ -6,8 +6,8 @@ import java.util.Set;
 
 
 @Entity
-@Table(name = "USER")
-public class User {
+@Table(name = "USERS")
+public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,7 +20,12 @@ public class User {
     private String passwordConfirm;
 
     @ManyToMany
-    private java.util.Set<Role> roles;
+    @JoinTable(
+            name = "USERS_ROLES",
+            joinColumns = @JoinColumn(name = "UserID"),
+            inverseJoinColumns = @JoinColumn(name = "RoleId")
+    )
+    private java.util.Set<Roles> roles;
 
     public Long getId() {
         return id;
@@ -54,11 +59,11 @@ public class User {
         this.passwordConfirm = passwordConfirm;
     }
 
-    public Set<Role> getRoles() {
+    public Set<Roles> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(Set<Roles> roles) {
         this.roles = roles;
     }
 }
