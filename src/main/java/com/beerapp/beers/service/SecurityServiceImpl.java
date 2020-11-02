@@ -14,11 +14,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-@Service("userDetailsService")
+@Service
 public class SecurityServiceImpl implements SecurityService {
 
+    @Autowired
     AuthenticationManager authenticationManager;
 
+    @Qualifier("userDetailsServiceImpl")
     @Autowired
     private UserDetailsService userDetailsService;
 

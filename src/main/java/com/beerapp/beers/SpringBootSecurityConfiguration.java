@@ -1,10 +1,13 @@
 package com.beerapp.beers;
 
 import com.beerapp.beers.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -12,24 +15,36 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-/*@Configuration
-@EnableWebSecurity*/
+@Configuration
+@EnableWebSecurity
 public class SpringBootSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Value(("${security.enable-csrf}"))
-    private boolean csrfEnabled;
+    @Qualifier("userDetailsServiceImpl")
+    @Autowired
+    private UserDetailsService userDetailsService;
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+        http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/**").hasAnyRole("USER")
+                //.antMatchers("/css/**", "/js/**", "/registration").permitAll() // for production mode
+                .antMatchers("/**").permitAll() //permitAll() for test only
+                .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/login").permitAll();
+                .formLogin()
+                .loginPage("/login")
+                .permitAll()
+                .and()
+                .logout()
+                .permitAll();
 
-        if (csrfEnabled) {
-            http.csrf().disable();
-        }
+
+
     }
 
     @Bean
@@ -38,9 +53,9 @@ public class SpringBootSecurityConfiguration extends WebSecurityConfigurerAdapte
     }
 
 
-    @Bean
-    @Override
-    protected UserDetailsService userDetailsService() {
-        return super.userDetailsService();
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
+
 }

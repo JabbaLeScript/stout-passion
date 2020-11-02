@@ -16,9 +16,9 @@ public class BeerStoutApplication {
         SpringApplication.run(BeerStoutApplication.class, args);
     }
 
-    @Bean
+    /*@Bean
     BCryptPasswordEncoder customBCryptPasswordEncoded(){
         return new BCryptPasswordEncoder();
-    }
+    }*/
 
 }

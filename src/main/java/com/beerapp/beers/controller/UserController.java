@@ -48,6 +48,8 @@ public class UserController {
 
         userService.save(userForm);
 
+        System.out.println("I'm saved ");
+
         securityService.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());
 
         System.out.println("registration test");
